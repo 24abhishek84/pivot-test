@@ -1,9 +1,10 @@
-type Pack = {
+interface Pack {
   size: number;
   price: number;
-};
+}
 
-interface Product {
-  code: string;
-  packs: Pack[];
+interface PackCombination {
+  size: number;
+  price: number;
+  count: number;
 }

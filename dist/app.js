@@ -1,80 +1,80 @@
-// Define the product data (as per the problem description)
-const products = {
-    VS5: {
-        code: "VS5",
-        packs: [
-            { size: 5, price: 8.99 },
+const getPackDetails = (productCode) => {
+    const products = {
+        "VS5": [
             { size: 3, price: 6.99 },
+            { size: 5, price: 8.99 }
         ],
-    },
-    MB11: {
-        code: "MB11",
-        packs: [
-            { size: 8, price: 24.95 },
-            { size: 5, price: 16.95 },
+        "MB11": [
             { size: 2, price: 9.95 },
+            { size: 5, price: 16.95 },
+            { size: 8, price: 24.95 }
         ],
-    },
-    CF: {
-        code: "CF",
-        packs: [
-            { size: 9, price: 16.99 },
-            { size: 5, price: 9.95 },
+        "CF": [
             { size: 3, price: 5.95 },
-        ],
-    },
+            { size: 5, price: 9.95 },
+            { size: 9, price: 16.99 }
+        ]
+    };
+    return products[productCode] || [];
 };
-// Function to calculate the minimal number of packs and total cost for a given product and quantity
-const calculateOrderCost = (quantity, product) => {
-    // Sort the packs by size in descending order (larger packs first)
-    product.packs.sort((a, b) => b.size - a.size);
-    let remainingQuantity = quantity;
-    const packBreakdown = [];
-    let totalCost = 0;
-    // Loop through the available pack sizes and calculate the minimal pack breakdown
-    for (const pack of product.packs) {
-        const packCount = Math.floor(remainingQuantity / pack.size);
-        if (packCount > 0) {
-            packBreakdown.push({ size: pack.size, count: packCount });
-            totalCost += packCount * pack.price;
-            remainingQuantity -= packCount * pack.size;
-        }
-    }
-    // If remaining quantity is not zero, we can't fulfill the order (but this shouldn't happen as per the problem statement)
-    if (remainingQuantity > 0) {
-        throw new Error(`Cannot fulfill the order for ${quantity} items of ${product.code}`);
-    }
-    // Format the output string
-    let result = `${quantity} ${product.code} $${totalCost.toFixed(2)}`;
-    for (const { size, count } of packBreakdown) {
-        // Manually find the price for the pack size
-        let packPrice = 0;
-        for (const pack of product.packs) {
-            if (pack.size === size) {
-                packPrice = pack.price;
-                break;
+const findMinimalPackCombination = (quantity, packs) => {
+    // Initialize a DP array where dp[i] will store the minimal cost for i items
+    const dp = Array(quantity + 1).fill(null);
+    const combination = Array(quantity + 1).fill(null);
+    dp[0] = 0; // Base case: cost for 0 items is 0
+    // Loop through all quantities from 1 to `quantity`
+    for (let i = 1; i <= quantity; i++) {
+        for (let pack of packs) {
+            if (i - pack.size >= 0 && dp[i - pack.size] !== null) {
+                const newCost = dp[i - pack.size] + pack.price;
+                if (dp[i] === null || newCost < dp[i]) {
+                    dp[i] = newCost;
+                    combination[i] = pack;
+                }
             }
         }
-        result += `\n${count} x ${size} $${(count * packPrice).toFixed(2)}`;
+    }
+    // If dp[quantity] is still null, it means we cannot fulfill the order
+    if (dp[quantity] === null) {
+        return null;
+    }
+    // Reconstruct the optimal pack combination from the `combination` array
+    const result = [];
+    let remainingQuantity = quantity;
+    while (remainingQuantity > 0) {
+        const pack = combination[remainingQuantity];
+        const existingPack = result.find((p) => p.size === pack.size);
+        if (existingPack) {
+            existingPack.count++;
+        }
+        else {
+            result.push({ size: pack.size, price: pack.price, count: 1 });
+        }
+        remainingQuantity -= pack.size;
     }
     return result;
 };
-// Function to process the input orders and output the result
-function processOrders(orders) {
-    orders.forEach((order) => {
-        const [quantityStr, productCode] = order.split(" ");
-        const quantity = parseInt(quantityStr);
-        const product = products[productCode];
-        if (!product) {
-            console.error(`Product with code ${productCode} not found.`);
-            return;
-        }
-        const result = calculateOrderCost(quantity, product);
-        console.log(result);
+const printOrderDetails = (quantity, productCode) => {
+    const packs = getPackDetails(productCode);
+    const combination = findMinimalPackCombination(quantity, packs);
+    if (combination === null) {
+        console.log(`Unable to fulfill the order for ${quantity} ${productCode}`);
+        return;
+    }
+    // Calculate total cost
+    let totalCost = 0;
+    combination.forEach(pack => {
+        totalCost += pack.price * pack.count;
     });
-}
-// Example input to test the function
-const orders = ["10 VS5", "13 CF"];
-console.log('in the app file');
-// Process the orders and print the results
-processOrders(orders);
+    // Print the order details
+    let output = `${quantity} ${productCode} $${totalCost.toFixed(2)}`;
+    combination.forEach(pack => {
+        output += `\n${pack.count} x ${pack.size} $${pack.price.toFixed(2)}`;
+    });
+    console.log(output);
+};
+// Example usage
+printOrderDetails(10, 'VS5');
+printOrderDetails(14, 'MB11');
+printOrderDetails(13, 'CF');
+//# sourceMappingURL=app.js.map
