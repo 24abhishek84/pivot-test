@@ -75,10 +75,7 @@ const printOrderDetails = (quantity, productCode) => {
         output += `\n${pack.count} x ${pack.size} $${pack.price.toFixed(2)}`;
     });
     console.log(output);
+    return output;
 };
 exports.printOrderDetails = printOrderDetails;
-// Example usage
-(0, exports.printOrderDetails)(10, 'VS5');
-(0, exports.printOrderDetails)(14, 'MB11');
-(0, exports.printOrderDetails)(13, 'CF');
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=calculateOrder.js.map
