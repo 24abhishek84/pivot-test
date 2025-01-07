@@ -24,7 +24,7 @@ const getPackDetails = (productCode: string): Pack[] => {
     const dp: (number | null)[] = Array(quantity + 1).fill(null);
     const combination: (Pack | null)[] = Array(quantity + 1).fill(null);
   
-    dp[0] = 0;  // Base case: cost for 0 items is 0
+    dp[0] = 0;  // Default: cost for 0 items is 0
   
     // Loop through all quantities from 1 to `quantity`
     for (let i = 1; i <= quantity; i++) {
