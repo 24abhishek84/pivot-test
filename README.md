@@ -2,8 +2,6 @@
 
 This project calculates the optimal pack combinations for given product quantities and prints the order details.
 
-## Project Structure
-
 ## Getting Started
 
 ### Prerequisites
@@ -29,3 +27,11 @@ This project calculates the optimal pack combinations for given product quantiti
 To start the application, run:
 ```sh
 npm start
+```
+
+### Testing the Application
+
+To test the application, run:
+```sh
+npm test
+```
