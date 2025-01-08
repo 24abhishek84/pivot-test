@@ -18,8 +18,12 @@ export const products: { [key: string]: Pack[] } = {
 };
 
 export const getPackDetails = (productCode: string): Pack[] => {
-  return products[productCode] || [];
-}
+  const packs = products[productCode];
+  if (!packs) {
+    throw new Error(`Invalid product code: ${productCode}`);
+  }
+  return packs;
+};
 
 export const findMinimalPackCombination = (quantity: number, packs: Pack[]): PackCombination[] | null => {
   // Initialize a DP array where dp[i] will store the minimal cost for i items

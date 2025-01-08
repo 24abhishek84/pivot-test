@@ -1,4 +1,4 @@
-import { findMinimalPackCombination, printOrderDetails, products } from "../app/calculateOrder";
+import { findMinimalPackCombination, getPackDetails, printOrderDetails, products } from "../app/calculateOrder";
 import { PackCombination } from '../app/types';
 
 describe('App tests', () => {
@@ -66,5 +66,9 @@ describe('App tests', () => {
             const result = findMinimalPackCombination(2, mockPacks);
             expect(result).toBe(null);
         });
+
+        it('should throw an error when product code is invalid', () => {
+            expect(() => getPackDetails("VS1")).toThrow("Invalid product code: VS1");
+        });       
     })
 });
