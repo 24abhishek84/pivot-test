@@ -1,9 +1,9 @@
-interface Pack {
+export interface Pack {
   size: number;
   price: number;
 }
 
-interface PackCombination {
+export interface PackCombination {
   size: number;
   price: number;
   count: number;
