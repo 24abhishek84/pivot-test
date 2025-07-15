@@ -1,7 +1,7 @@
 import { Pack, PackCombination } from "./types";
 // src/app/calculateOrder.ts
 // This module calculates the optimal pack combination for a given product and quantity.
-
+// THis iis a dummy commit I am going to change later.
 
 export const products: { [key: string]: Pack[] } = {
   "VS5": [
